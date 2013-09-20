@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Conectar</string>
+     <string>Log in</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="text_output">
