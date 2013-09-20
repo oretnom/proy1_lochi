@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->edit_password->setEchoMode(QLineEdit::Password);
 }
 
-//Connection to database and showing tables
+//Connection to database and table display
 
 bool MainWindow::connect(){
 
@@ -23,6 +23,8 @@ bool MainWindow::connect(){
     QSqlQuery query;
     QString output;
     int i;
+
+//Setting up the connection
 
     db.setHostName("localhost");
     db.setDatabaseName("proyecto_1");
@@ -34,9 +36,11 @@ bool MainWindow::connect(){
         return false;
     }
 
-    QMessageBox::information(this,"Success!","Connection established");
+    QMessageBox::information(this,"Welcome " + ui->edit_username->text() + "!","You are now logged in!");
     ui->edit_username->clear();
     ui->edit_password->clear();
+
+//Filling "provincia", "nota" and "sigla" drop-down lists
 
     query.exec("SELECT DISTINCT provincia FROM Ingresados ORDER BY provincia");
     while(query.next()){
@@ -54,6 +58,8 @@ bool MainWindow::connect(){
     }
     ui->dropdown_nota_max->setCurrentIndex(10);
 
+//Showing tables on the database
+
     query.exec("SHOW TABLES");
     output += "Tablas en la base de datos:\n\n";
     while(query.next()){
@@ -65,7 +71,7 @@ bool MainWindow::connect(){
     return true;
 }
 
-//Nombre y cantidad de graduados dado cierto cantón
+//Displaying names and quantity of graduates according to "canton"
 
 bool MainWindow::graduados_canton(){
 
@@ -91,7 +97,7 @@ bool MainWindow::graduados_canton(){
     return true;
 }
 
-//Nombre y nota de estudiantes dado un curso y un rango de notas
+//Displaying names and scores given "curso" and "notas" in certain range
 
 bool MainWindow::nota_curso_limitada(){
 
@@ -118,7 +124,7 @@ bool MainWindow::nota_curso_limitada(){
     return true;
 }
 
-//Llenado de la lista de cantones según la provincia seleccionada
+//Filling "canton" drop-down list
 
 bool MainWindow::fill_list_canton(){
 
@@ -135,7 +141,7 @@ bool MainWindow::fill_list_canton(){
     return true;
 }
 
-//Llenado de la lista de distritos según el cantón seleccionado
+//Filling "distrito" drop-down list
 
 bool MainWindow::fill_list_distrito(){
 
