@@ -33,6 +33,7 @@ bool MainWindow::connect(){
         QMessageBox::critical(0,"Database error!",db.lastError().text());
         return false;
     }
+
     QMessageBox::information(this,"Success!","Connection established");
     ui->edit_username->clear();
     ui->edit_password->clear();
@@ -47,7 +48,11 @@ bool MainWindow::connect(){
         ui->dropdown_sigla->addItem(query.value(0).toString());
     }
 
-    for(i=0; i<11; i++) ui->dropdown_nota_min->addItem(QString::number(i));
+    for(i=0; i<=10; i++){
+        ui->dropdown_nota_min->addItem(QString::number(i));
+        ui->dropdown_nota_max->addItem(QString::number(i));
+    }
+    ui->dropdown_nota_max->setCurrentIndex(10);
 
     query.exec("SHOW TABLES");
     output += "Tablas en la base de datos:\n\n";
@@ -86,19 +91,21 @@ bool MainWindow::graduados_canton(){
     return true;
 }
 
-//Nombre y nota de estudiantes dado un curso y un umbral mínimo de nota
+//Nombre y nota de estudiantes dado un curso y un rango de notas
 
 bool MainWindow::nota_curso_limitada(){
 
     QSqlQuery query;
     QString output,input_curso;
-    int input_nota;
+    int input_nota_min,input_nota_max;
 
     input_curso = ui->dropdown_sigla->currentText();
-    input_nota = ui->dropdown_nota_min->currentText().toInt();
+    input_nota_min = ui->dropdown_nota_min->currentText().toInt();
+    input_nota_max = ui->dropdown_nota_max->currentText().toInt();
 
-    query.prepare("SELECT nombre, apellido1, apellido2, notaordinaria FROM Notas WHERE notaordinaria > :nota AND sigla = :curso");
-    query.bindValue(":nota",input_nota);
+    query.prepare("SELECT nombre, apellido1, apellido2, notaordinaria FROM Notas WHERE notaordinaria >= :nota_min AND notaordinaria <= :nota_max AND sigla = :curso");
+    query.bindValue(":nota_min",input_nota_min);
+    query.bindValue(":nota_max",input_nota_max);
     query.bindValue(":curso",input_curso);
     query.exec();
 
