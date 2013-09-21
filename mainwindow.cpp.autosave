@@ -135,15 +135,8 @@ bool MainWindow::graduados_region(){
 bool MainWindow::nota_curso_limitada(){
 
     QSqlQuery query;
-    QString output;//,input_curso;
-    //int input_nota_min,input_nota_max,input_ano_inicial,input_ano_final;
-/*
-    input_curso = ui->dropdown_sigla->currentText();
-    input_nota_min = ui->dropdown_nota_min->currentText().toInt();
-    input_nota_max = ui->dropdown_nota_max->currentText().toInt();
-    input_ano_inicial = ui->dropdown_ano_inicial->currentText().toInt();
-    input_ano_final = ui->dropdown_ano_final->currentText().toInt();
-*/
+    QString output;
+
     query.prepare("SELECT nombre, apellido1, apellido2, notaordinaria FROM Notas WHERE notaordinaria >= :nota_min AND notaordinaria <= :nota_max AND sigla = :curso AND anio >= :ano_inicial AND anio <= :ano_final");
     query.bindValue(":nota_min",ui->dropdown_nota_min->currentText().toInt());
     query.bindValue(":nota_max",ui->dropdown_nota_max->currentText().toInt());
