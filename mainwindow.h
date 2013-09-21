@@ -16,7 +16,7 @@ public:
 
 public slots:
     bool connect();
-    bool graduados_canton();
+    bool graduados_region();
     bool nota_curso_limitada();
     bool fill_list_canton();
     bool fill_list_distrito();

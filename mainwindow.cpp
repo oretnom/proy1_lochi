@@ -40,12 +40,14 @@ bool MainWindow::connect(){
     ui->edit_username->clear();
     ui->edit_password->clear();
 
-//Filling "provincia", "nota" and "sigla" drop-down lists
+//Filling "provincia", "nota", "año inicial, "año final" and "sigla" drop-down lists
 
+    ui->dropdown_provincia->clear();
     query.exec("SELECT DISTINCT provincia FROM Ingresados ORDER BY provincia");
     while(query.next()){
         ui->dropdown_provincia->addItem(query.value(0).toString());
     }
+    ui->dropdown_provincia->addItem("TODAS");
 
     query.exec("SELECT DISTINCT sigla FROM Notas ORDER BY sigla");
     while(query.next()){
@@ -57,6 +59,12 @@ bool MainWindow::connect(){
         ui->dropdown_nota_max->addItem(QString::number(i));
     }
     ui->dropdown_nota_max->setCurrentIndex(10);
+
+    for(i=1973; i<=2013; i++){
+        ui->dropdown_ano_inicial->addItem(QString::number(i));
+        ui->dropdown_ano_final->addItem(QString::number(i));
+    }
+    ui->dropdown_ano_final->setCurrentIndex(40);
 
 //Showing tables on the database
 
@@ -73,16 +81,18 @@ bool MainWindow::connect(){
 
 //Displaying names and quantity of graduates according to "canton"
 
-bool MainWindow::graduados_canton(){
+bool MainWindow::graduados_region(){
 
     QSqlQuery query;
-    QString output,input;
+    QString output,input_provincia,input_canton,input_distrito;
     int graduados = 0;
 
-    input = ui->dropdown_canton->currentText();
+    input_provincia = ui->dropdown_provincia->currentText();
+    input_canton = ui->dropdown_canton->currentText();
+    input_distrito = ui->dropdown_distrito->currentText();
 
     query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.canton = :canton");
-    query.bindValue(":canton",input);
+    query.bindValue(":canton",input_canton);
     query.exec();
 
     while(query.next()){
@@ -90,33 +100,37 @@ bool MainWindow::graduados_canton(){
         graduados += 1;
     }
 
-    output += "\n Total de graduados en " + input + ": ";
+    output += "\n Total de graduados en la region: ";
     output.append(QString("%1").arg(graduados));
     ui->text_output->setText(output);
 
     return true;
 }
 
-//Displaying names and scores given "curso" and "notas" in certain range
+//Displaying names and scores given "curso", "año inicial", "año final" and "notas" in certain range
 
 bool MainWindow::nota_curso_limitada(){
 
     QSqlQuery query;
     QString output,input_curso;
-    int input_nota_min,input_nota_max;
+    int input_nota_min,input_nota_max,input_ano_inicial,input_ano_final;
 
     input_curso = ui->dropdown_sigla->currentText();
     input_nota_min = ui->dropdown_nota_min->currentText().toInt();
     input_nota_max = ui->dropdown_nota_max->currentText().toInt();
+    input_ano_inicial = ui->dropdown_ano_inicial->currentText().toInt();
+    input_ano_final = ui->dropdown_ano_final->currentText().toInt();
 
-    query.prepare("SELECT nombre, apellido1, apellido2, notaordinaria FROM Notas WHERE notaordinaria >= :nota_min AND notaordinaria <= :nota_max AND sigla = :curso");
+    query.prepare("SELECT nombre, apellido1, apellido2, notaordinaria FROM Notas WHERE notaordinaria >= :nota_min AND notaordinaria <= :nota_max AND sigla = :curso AND anio >= :ano_inicial AND anio <= :ano_final");
     query.bindValue(":nota_min",input_nota_min);
     query.bindValue(":nota_max",input_nota_max);
     query.bindValue(":curso",input_curso);
+    query.bindValue(":ano_inicial",input_ano_inicial);
+    query.bindValue(":ano_final",input_ano_final);
     query.exec();
 
     while(query.next()){
-        output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + " " + query.value(3).toString() + "\n";
+        output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + ", Nota: " + query.value(3).toString() + "\n";
     }
 
     ui->text_output->setText(output);
@@ -131,11 +145,16 @@ bool MainWindow::fill_list_canton(){
     QSqlQuery query;
 
     ui->dropdown_canton->clear();
-    query.prepare("SELECT DISTINCT canton FROM Ingresados WHERE provincia = :provincia ORDER BY canton");
-    query.bindValue(":provincia",ui->dropdown_provincia->currentText());
-    query.exec();
-    while(query.next()){
-        ui->dropdown_canton->addItem(query.value(0).toString());
+
+    if(ui->dropdown_provincia->currentText()!="TODAS"){
+        query.prepare("SELECT DISTINCT canton FROM Ingresados WHERE provincia = :provincia ORDER BY canton");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.exec();
+
+        while(query.next()){
+            ui->dropdown_canton->addItem(query.value(0).toString());
+        }
+        ui->dropdown_canton->addItem("TODOS");
     }
 
     return true;
@@ -148,11 +167,15 @@ bool MainWindow::fill_list_distrito(){
     QSqlQuery query;
 
     ui->dropdown_distrito->clear();
-    query.prepare("SELECT DISTINCT distrito FROM Ingresados WHERE canton = :canton ORDER BY distrito");
-    query.bindValue(":canton",ui->dropdown_canton->currentText());
-    query.exec();
-    while(query.next()){
-        ui->dropdown_distrito->addItem(query.value(0).toString());
+
+    if(ui->dropdown_canton->currentText()!="TODOS"){
+        query.prepare("SELECT DISTINCT distrito FROM Ingresados WHERE canton = :canton ORDER BY distrito");
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.exec();
+        while(query.next()){
+            ui->dropdown_distrito->addItem(query.value(0).toString());
+        }
+        ui->dropdown_distrito->addItem("TODOS");
     }
 
     return true;
