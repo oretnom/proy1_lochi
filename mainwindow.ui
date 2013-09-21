@@ -85,7 +85,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Graduados/cantón</string>
+     <string>Graduados/región</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_notas">

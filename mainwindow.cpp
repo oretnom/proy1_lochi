@@ -43,6 +43,12 @@ bool MainWindow::connect(){
 //Filling "provincia", "nota", "año inicial, "año final" and "sigla" drop-down lists
 
     ui->dropdown_provincia->clear();
+    ui->dropdown_sigla->clear();
+    ui->dropdown_nota_min->clear();
+    ui->dropdown_nota_max->clear();
+    ui->dropdown_ano_inicial->clear();
+    ui->dropdown_ano_final->clear();
+
     query.exec("SELECT DISTINCT provincia FROM Ingresados ORDER BY provincia");
     while(query.next()){
         ui->dropdown_provincia->addItem(query.value(0).toString());
@@ -87,13 +93,30 @@ bool MainWindow::graduados_region(){
     QString output,input_provincia,input_canton,input_distrito;
     int graduados = 0;
 
-    input_provincia = ui->dropdown_provincia->currentText();
-    input_canton = ui->dropdown_canton->currentText();
-    input_distrito = ui->dropdown_distrito->currentText();
+    if(ui->dropdown_provincia->currentText() == "TODAS"){
+        query.exec("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne");
+    }
 
-    query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.canton = :canton");
-    query.bindValue(":canton",input_canton);
-    query.exec();
+    else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() == "TODOS"){
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.exec();
+    }
+
+    else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() != "TODOS" && ui->dropdown_distrito->currentText() == "TODOS"){
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.exec();
+    }
+
+    else{
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Ingresados.distrito = :distrito");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.bindValue(":distrito",ui->dropdown_distrito->currentText());
+        query.exec();
+    }
 
     while(query.next()){
         output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
@@ -169,7 +192,8 @@ bool MainWindow::fill_list_distrito(){
     ui->dropdown_distrito->clear();
 
     if(ui->dropdown_canton->currentText()!="TODOS"){
-        query.prepare("SELECT DISTINCT distrito FROM Ingresados WHERE canton = :canton ORDER BY distrito");
+        query.prepare("SELECT DISTINCT distrito FROM Ingresados WHERE provincia = :provincia AND canton = :canton ORDER BY distrito");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
         query.bindValue(":canton",ui->dropdown_canton->currentText());
         query.exec();
         while(query.next()){
