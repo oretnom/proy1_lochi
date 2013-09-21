@@ -4,6 +4,8 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QtSql>
+#include <iostream>
+using namespace std;
 
 //Main window call
 
@@ -90,42 +92,153 @@ bool MainWindow::connect(){
 bool MainWindow::graduados_region(){
 
     QSqlQuery query;
-    QString output,input_provincia,input_canton,input_distrito;
-    int graduados = 0;
+    QString output;
+    int graduados_bach = 0,graduados_lic=0;
 
     if(ui->dropdown_provincia->currentText() == "TODAS"){
-        query.exec("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne");
+
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND descripciontitulo = 'BACHILLER EN INGENIERIA ELECTRICA'");
+        if(!query.exec())
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+
+        output += "Graduados de bachillerato: \n";
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_bach += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_bach));
+        output += "\n\n";
+
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND descripciontitulo = 'LICENCIADO (A) EN INGENIERIA ELECTRICA'");
+        if(!query.exec())
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+
+        output += "Graduados de licenciatura: \n";
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_lic += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_lic));
+
+        ui->text_output->setText(output);
     }
 
     else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() == "TODOS"){
-        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia");
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Graduados.descripciontitulo = 'BACHILLER EN INGENIERIA ELECTRICA'");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+
+        if(!query.exec())
+            QMessageBox::critical(0,"Database error!",query.lastError().text());
+
+        output += "Graduados de bachillerato: \n";
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_bach += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_bach));
+        output += "\n\n";
+
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Graduados.descripciontitulo = 'LICENCIADO (A) EN INGENIERIA ELECTRICA'");
         query.bindValue(":provincia",ui->dropdown_provincia->currentText());
         query.exec();
+
+        output += "Graduados de licenciatura: \n";
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_lic += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_lic));
+
+        ui->text_output->setText(output);
     }
 
     else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() != "TODOS" && ui->dropdown_distrito->currentText() == "TODOS"){
-        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton");
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Graduados.descripciontitulo = 'BACHILLER EN INGENIERIA ELECTRICA'");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+
+        if(!query.exec())
+            QMessageBox::critical(0,"Database error!",query.lastError().text());
+
+        output += "Graduados de bachillerato: \n";
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_bach += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_bach));
+        output += "\n\n";
+
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Graduados.descripciontitulo = 'LICENCIADO (A) EN INGENIERIA ELECTRICA'");
         query.bindValue(":provincia",ui->dropdown_provincia->currentText());
         query.bindValue(":canton",ui->dropdown_canton->currentText());
         query.exec();
+
+        output += "Graduados de licenciatura: \n";
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_lic += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_lic));
+
+        ui->text_output->setText(output);
     }
 
     else{
-        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Ingresados.distrito = :distrito");
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Ingresados.distrito = :distrito AND Graduados.descripciontitulo = 'BACHILLER EN INGENIERIA ELECTRICA'");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.bindValue(":distrito",ui->dropdown_distrito->currentText());
+
+        if(!query.exec())
+            QMessageBox::critical(0,"Database error!",query.lastError().text());
+
+        output += "Graduados de bachillerato: \n";
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_bach += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_bach));
+        output += "\n\n";
+
+        query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Ingresados.distrito = :distrito AND Graduados.descripciontitulo = 'LICENCIADO (A) EN INGENIERIA ELECTRICA'");
         query.bindValue(":provincia",ui->dropdown_provincia->currentText());
         query.bindValue(":canton",ui->dropdown_canton->currentText());
         query.bindValue(":distrito",ui->dropdown_distrito->currentText());
         query.exec();
-    }
 
-    while(query.next()){
-        output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
-        graduados += 1;
-    }
+        output += "Graduados de licenciatura: \n";
 
-    output += "\n Total de graduados en la region: ";
-    output.append(QString("%1").arg(graduados));
-    ui->text_output->setText(output);
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            graduados_lic += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(graduados_lic));
+
+        ui->text_output->setText(output);
+    }
 
     return true;
 }
@@ -135,22 +248,21 @@ bool MainWindow::graduados_region(){
 bool MainWindow::nota_curso_limitada(){
 
     QSqlQuery query;
-    QString output;//,input_curso;
-    //int input_nota_min,input_nota_max,input_ano_inicial,input_ano_final;
-/*
-    input_curso = ui->dropdown_sigla->currentText();
-    input_nota_min = ui->dropdown_nota_min->currentText().toInt();
-    input_nota_max = ui->dropdown_nota_max->currentText().toInt();
-    input_ano_inicial = ui->dropdown_ano_inicial->currentText().toInt();
-    input_ano_final = ui->dropdown_ano_final->currentText().toInt();
-*/
+    QString output;
+
     query.prepare("SELECT nombre, apellido1, apellido2, notaordinaria FROM Notas WHERE notaordinaria >= :nota_min AND notaordinaria <= :nota_max AND sigla = :curso AND anio >= :ano_inicial AND anio <= :ano_final");
     query.bindValue(":nota_min",ui->dropdown_nota_min->currentText().toInt());
     query.bindValue(":nota_max",ui->dropdown_nota_max->currentText().toInt());
     query.bindValue(":curso",ui->dropdown_sigla->currentText());
     query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
     query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
-    query.exec();
+    if(!query.exec()){
+        QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+        return false;
+    }
+
+    if(ui->dropdown_nota_min->currentText().toInt() > ui->dropdown_nota_max->currentText().toInt() || ui->dropdown_ano_inicial->currentText().toInt() > ui->dropdown_ano_final->currentText().toInt())
+        QMessageBox::critical(0,"Eighth layer error",trUtf8("¡No sea imbécil!"));
 
     while(query.next()){
         output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + ", Nota: " + query.value(3).toString() + "\n";
