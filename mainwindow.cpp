@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->edit_password->setEchoMode(QLineEdit::Password);
+    //ui->centralWidget->setStyleSheet("background-image: url(/home/juan/lab_progra/prueba1/background.jpg)");
 }
 
 //Connection to database and table display
@@ -51,11 +51,11 @@ bool MainWindow::connect(){
     ui->dropdown_ano_inicial->clear();
     ui->dropdown_ano_final->clear();
 
+    ui->dropdown_provincia->addItem("TODAS");
     query.exec("SELECT DISTINCT provincia FROM Ingresados ORDER BY provincia");
     while(query.next()){
         ui->dropdown_provincia->addItem(query.value(0).toString());
     }
-    ui->dropdown_provincia->addItem("TODAS");
 
     query.exec("SELECT DISTINCT sigla FROM Notas ORDER BY sigla");
     while(query.next()){
@@ -87,7 +87,7 @@ bool MainWindow::connect(){
     return true;
 }
 
-//Displaying names and quantity of graduates according to "canton"
+//Displaying names and quantity of graduates according to location
 
 bool MainWindow::graduados_region(){
 
@@ -98,8 +98,10 @@ bool MainWindow::graduados_region(){
     if(ui->dropdown_provincia->currentText() == "TODAS"){
 
         query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND descripciontitulo = 'BACHILLER EN INGENIERIA ELECTRICA'");
-        if(!query.exec())
+        if(!query.exec()){
             QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
 
         output += "Graduados de bachillerato: \n";
 
@@ -113,8 +115,10 @@ bool MainWindow::graduados_region(){
         output += "\n\n";
 
         query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND descripciontitulo = 'LICENCIADO (A) EN INGENIERIA ELECTRICA'");
-        if(!query.exec())
+        if(!query.exec()){
             QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
 
         output += "Graduados de licenciatura: \n";
 
@@ -133,8 +137,10 @@ bool MainWindow::graduados_region(){
         query.prepare("SELECT Graduados.nombre,Graduados.apellido1,Graduados.apellido2 FROM Graduados,Ingresados WHERE Graduados.carne = Ingresados.carne AND Ingresados.provincia = :provincia AND Graduados.descripciontitulo = 'BACHILLER EN INGENIERIA ELECTRICA'");
         query.bindValue(":provincia",ui->dropdown_provincia->currentText());
 
-        if(!query.exec())
-            QMessageBox::critical(0,"Database error!",query.lastError().text());
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
 
         output += "Graduados de bachillerato: \n";
 
@@ -169,8 +175,10 @@ bool MainWindow::graduados_region(){
         query.bindValue(":provincia",ui->dropdown_provincia->currentText());
         query.bindValue(":canton",ui->dropdown_canton->currentText());
 
-        if(!query.exec())
-            QMessageBox::critical(0,"Database error!",query.lastError().text());
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
 
         output += "Graduados de bachillerato: \n";
 
@@ -207,8 +215,10 @@ bool MainWindow::graduados_region(){
         query.bindValue(":canton",ui->dropdown_canton->currentText());
         query.bindValue(":distrito",ui->dropdown_distrito->currentText());
 
-        if(!query.exec())
-            QMessageBox::critical(0,"Database error!",query.lastError().text());
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
 
         output += "Graduados de bachillerato: \n";
 
@@ -256,6 +266,7 @@ bool MainWindow::nota_curso_limitada(){
     query.bindValue(":curso",ui->dropdown_sigla->currentText());
     query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
     query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
     if(!query.exec()){
         QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
         return false;
@@ -285,11 +296,11 @@ bool MainWindow::fill_list_canton(){
         query.prepare("SELECT DISTINCT canton FROM Ingresados WHERE provincia = :provincia ORDER BY canton");
         query.bindValue(":provincia",ui->dropdown_provincia->currentText());
         query.exec();
+        ui->dropdown_canton->addItem("TODOS");
 
         while(query.next()){
             ui->dropdown_canton->addItem(query.value(0).toString());
         }
-        ui->dropdown_canton->addItem("TODOS");
     }
 
     return true;
@@ -308,10 +319,11 @@ bool MainWindow::fill_list_distrito(){
         query.bindValue(":provincia",ui->dropdown_provincia->currentText());
         query.bindValue(":canton",ui->dropdown_canton->currentText());
         query.exec();
+        ui->dropdown_distrito->addItem("TODOS");
+
         while(query.next()){
             ui->dropdown_distrito->addItem(query.value(0).toString());
         }
-        ui->dropdown_distrito->addItem("TODOS");
     }
 
     return true;
