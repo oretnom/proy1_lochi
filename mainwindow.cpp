@@ -43,14 +43,14 @@ bool MainWindow::connect(){
     ui->edit_password->clear();
 
 //Filling "provincia", "nota", "año inicial, "año final" and "sigla" drop-down lists
-
+/*
     ui->dropdown_provincia->clear();
     ui->dropdown_sigla->clear();
     ui->dropdown_nota_min->clear();
     ui->dropdown_nota_max->clear();
     ui->dropdown_ano_inicial->clear();
     ui->dropdown_ano_final->clear();
-
+*/
     ui->dropdown_provincia->addItem("TODAS");
     query.exec("SELECT DISTINCT provincia FROM Ingresados ORDER BY provincia");
     while(query.next()){
@@ -83,6 +83,7 @@ bool MainWindow::connect(){
     }
 
     ui->text_output->setText(output);
+    ui->button_connect->setEnabled(false);
 
     return true;
 }
@@ -326,6 +327,93 @@ bool MainWindow::fill_list_distrito(){
         }
     }
 
+    return true;
+}
+
+bool MainWindow::promedio(){
+
+    QSqlQuery query;
+    QString output;
+    double counter = 0.0, prom = 0.0;
+
+    query.prepare("SELECT sigla, notaordinaria FROM Notas WHERE sigla = :sigla");
+    query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+    query.exec();
+
+   while(query.next()){
+
+        if (query.value(1)=="RJ" || query.value(1)=="RM"){
+            ;
+        }
+
+        else if(query.value(1)=="RI"){
+            counter+=1.0;
+            prom+=4.0;
+        }
+
+        else if(query.value(1)=="PE"){
+            counter+=1.0;
+            prom+=5.5;
+        }
+
+        else{
+            counter+=1.0;
+            prom+=query.value(1).toDouble();
+        }
+
+    }
+    if(counter==0.0){
+       ui->text_output->setText("No hay datos a mostrar");
+    }
+
+    else{
+        output+="Promedio del Curso " + ui->dropdown_sigla->currentText() + ": " + QString::number(prom/counter);
+        ui->text_output->setText(output);
+    }
+    return true;
+}
+
+bool MainWindow::promedio_estudiante(){
+    QSqlQuery query;
+    QString output;
+    double counter = 0.0, prom = 0.0;
+
+    query.prepare("SELECT nombre, apellido1, apellido2,notaordinaria FROM Notas WHERE carne = :carne AND anio >= :ano_inicial AND anio <= :ano_final");
+    query.bindValue(":carne",ui->edit_carne->text());
+    query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+    query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+    query.exec();
+
+    while(query.next()){
+
+        if (query.value(3)=="RJ" || query.value(3)=="RM"){
+            ;
+        }
+
+        else if(query.value(3)=="RI"){
+            counter+=1.0;
+            prom+=4.0;
+        }
+
+        else if(query.value(3)=="PE"){
+            counter+=1.0;
+            prom+=5.5;
+        }
+
+        else{
+            counter+=1.0;
+            prom+=query.value(3).toDouble();
+        }
+
+    }
+    if(counter==0.0){
+       ui->text_output->setText("No hay datos a mostrar");
+    }
+
+    else{
+        output+="Promedio del estudiante en el periodo especificado: " + QString::number(prom/counter);
+        ui->text_output->setText(output);
+    }
     return true;
 }
 

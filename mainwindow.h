@@ -20,6 +20,8 @@ public slots:
     bool nota_curso_limitada();
     bool fill_list_canton();
     bool fill_list_distrito();
+    bool promedio();
+    bool promedio_estudiante();
 
 private:
     Ui::MainWindow *ui;
