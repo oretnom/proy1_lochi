@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>600</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>850</width>
-    <height>600</height>
+    <width>1280</width>
+    <height>720</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -32,8 +32,8 @@
    <widget class="QTextEdit" name="text_output">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>230</y>
+      <x>290</x>
+      <y>180</y>
       <width>411</width>
       <height>291</height>
      </rect>
@@ -73,21 +73,21 @@ background:white;
    <widget class="QPushButton" name="button_graduados">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>10</y>
+      <x>430</x>
+      <y>40</y>
       <width>131</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Graduados/región</string>
+     <string>Graduados</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_notas">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>50</y>
+      <x>570</x>
+      <y>40</y>
       <width>131</width>
       <height>27</height>
      </rect>
@@ -257,34 +257,34 @@ background:white;
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>90</y>
+      <x>710</x>
+      <y>40</y>
       <width>131</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Nota/curso</string>
+     <string>Nota/región</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>130</y>
+      <x>850</x>
+      <y>40</y>
       <width>131</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Promedio</string>
+     <string>Nota/estudiante</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="edit_carne">
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>490</y>
+      <y>500</y>
       <width>113</width>
       <height>27</height>
      </rect>
@@ -299,7 +299,7 @@ background:white;
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>500</y>
+      <y>510</y>
       <width>66</width>
       <height>17</height>
      </rect>
@@ -311,14 +311,14 @@ background:white;
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>170</y>
+      <x>290</x>
+      <y>40</y>
       <width>131</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Ingresados/región</string>
+     <string>Ingresados</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_username">
@@ -406,10 +406,10 @@ background:white;
    <widget class="QCustomPlot" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>10</y>
-      <width>371</width>
-      <height>211</height>
+      <x>730</x>
+      <y>160</y>
+      <width>531</width>
+      <height>341</height>
      </rect>
     </property>
    </widget>
@@ -428,7 +428,7 @@ background:white;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>850</width>
+     <width>1280</width>
      <height>25</height>
     </rect>
    </property>
@@ -453,7 +453,7 @@ background:white;
    <hints>
     <hint type="sourcelabel">
      <x>420</x>
-     <y>348</y>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>159</x>
@@ -468,8 +468,8 @@ background:white;
    <slot>nota_curso_limitada()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>420</x>
-     <y>388</y>
+     <x>720</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
      <x>180</x>
@@ -548,8 +548,8 @@ background:white;
    <slot>promedio_curso_region()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>530</x>
-     <y>441</y>
+     <x>430</x>
+     <y>154</y>
     </hint>
     <hint type="destinationlabel">
      <x>586</x>
@@ -564,8 +564,8 @@ background:white;
    <slot>promedio_estudiante()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>445</x>
-     <y>485</y>
+     <x>430</x>
+     <y>194</y>
     </hint>
     <hint type="destinationlabel">
      <x>421</x>
@@ -580,8 +580,8 @@ background:white;
    <slot>ingresados_region()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>526</y>
+     <x>430</x>
+     <y>234</y>
     </hint>
     <hint type="destinationlabel">
      <x>605</x>

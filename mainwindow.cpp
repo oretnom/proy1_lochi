@@ -60,11 +60,11 @@ bool MainWindow::connect(){
     }
     ui->dropdown_nota_max->setCurrentIndex(10);
 
-    for(i=1973; i<=2013; i++){
+    for(i=1993; i<=2013; i++){
         ui->dropdown_ano_inicial->addItem(QString::number(i));
         ui->dropdown_ano_final->addItem(QString::number(i));
     }
-    ui->dropdown_ano_final->setCurrentIndex(40);
+    ui->dropdown_ano_final->setCurrentIndex(20);
 
 //Showing tables on the database
 
