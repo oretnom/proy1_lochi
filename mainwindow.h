@@ -12,6 +12,7 @@ class MainWindow : public QMainWindow{
     
 public:
     explicit MainWindow(QWidget *parent = 0);
+    Ui::MainWindow *ui;
     ~MainWindow();
 
 public slots:
@@ -20,11 +21,12 @@ public slots:
     bool nota_curso_limitada();
     bool fill_list_canton();
     bool fill_list_distrito();
-    bool promedio();
+    bool promedio_curso_region();
     bool promedio_estudiante();
+    bool ingresados_region();
 
 private:
-    Ui::MainWindow *ui;
+//    Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H

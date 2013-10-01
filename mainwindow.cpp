@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //ui->centralWidget->setStyleSheet("background-image: url(/home/juan/lab_progra/prueba1/background.jpg)");
 }
 
 //Connection to database and table display
@@ -43,14 +42,7 @@ bool MainWindow::connect(){
     ui->edit_password->clear();
 
 //Filling "provincia", "nota", "año inicial, "año final" and "sigla" drop-down lists
-/*
-    ui->dropdown_provincia->clear();
-    ui->dropdown_sigla->clear();
-    ui->dropdown_nota_min->clear();
-    ui->dropdown_nota_max->clear();
-    ui->dropdown_ano_inicial->clear();
-    ui->dropdown_ano_final->clear();
-*/
+
     ui->dropdown_provincia->addItem("TODAS");
     query.exec("SELECT DISTINCT provincia FROM Ingresados ORDER BY provincia");
     while(query.next()){
@@ -132,6 +124,7 @@ bool MainWindow::graduados_region(){
         output.append(QString("%1").arg(graduados_lic));
 
         ui->text_output->setText(output);
+
     }
 
     else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() == "TODOS"){
@@ -250,7 +243,518 @@ bool MainWindow::graduados_region(){
 
         ui->text_output->setText(output);
     }
+    return true;
 
+}
+
+//Displaying average scores, according to region and subject
+
+bool MainWindow::promedio_curso_region(){
+
+    QSqlQuery query;
+    QString output;
+    double counter = 0.0, prom = 0.0;
+
+
+    if(ui->dropdown_provincia->currentText() == "TODAS"){
+
+        query.prepare("SELECT Notas.sigla, Notas.notaordinaria FROM Notas,Ingresados WHERE Notas.carne = Ingresados.carne AND Notas.sigla = :sigla AND Notas.anio >= :ano_inicial AND Notas.anio <= :ano_final");
+        query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+
+           while(query.next()){
+
+                if (query.value(1)=="RJ" || query.value(1)=="RM"){
+                    ;
+                }
+
+                else if(query.value(1)=="RI"){
+                    counter+=1.0;
+                    prom+=4.0;
+                }
+
+                else if(query.value(1)=="PE"){
+                    counter+=1.0;
+                    prom+=5.5;
+                }
+
+                else{
+                    counter+=1.0;
+                    prom+=query.value(1).toDouble();
+                }
+
+            }
+            if(counter==0.0){
+               ui->text_output->setText("No hay datos a mostrar");
+            }
+
+            else{
+                output+= trUtf8("Promedio del curso en la región seleccionada: ") + QString::number(prom/counter);
+                ui->text_output->setText(output);
+            }
+        }
+
+    else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() == "TODOS"){
+        query.prepare("SELECT Notas.sigla, Notas.notaordinaria FROM Notas,Ingresados WHERE Notas.carne = Ingresados.carne AND Notas.sigla = :sigla and Ingresados.provincia= :provincia AND Notas.anio >= :ano_inicial AND Notas.anio <= :ano_final");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+
+        while(query.next()){
+
+            if (query.value(1)=="RJ" || query.value(1)=="RM"){
+                ;
+            }
+
+            else if(query.value(1)=="RI"){
+                counter+=1.0;
+                prom+=4.0;
+            }
+
+            else if(query.value(1)=="PE"){
+                counter+=1.0;
+                prom+=5.5;
+            }
+
+            else{
+                counter+=1.0;
+                prom+=query.value(1).toDouble();
+            }
+
+        }
+        if(counter==0.0){
+           ui->text_output->setText("No hay datos a mostrar");
+        }
+
+        else{
+            output+=trUtf8("Promedio del curso en la región seleccionada: ") + QString::number(prom/counter);
+            ui->text_output->setText(output);
+        }
+
+    }
+
+    else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() != "TODOS" && ui->dropdown_distrito->currentText() == "TODOS"){
+        query.prepare("SELECT Notas.sigla, Notas.notaordinaria FROM Notas,Ingresados WHERE Notas.carne = Ingresados.carne AND Notas.sigla = :sigla and Ingresados.provincia= :provincia AND Ingresados.canton= :canton AND Notas.anio >= :ano_inicial AND Notas.anio <= :ano_final");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+        while(query.next()){
+
+            if (query.value(1)=="RJ" || query.value(1)=="RM"){
+                ;
+            }
+
+            else if(query.value(1)=="RI"){
+                counter+=1.0;
+                prom+=4.0;
+            }
+
+            else if(query.value(1)=="PE"){
+                counter+=1.0;
+                prom+=5.5;
+            }
+
+            else{
+                counter+=1.0;
+                prom+=query.value(1).toDouble();
+            }
+
+        }
+        if(counter==0.0){
+           ui->text_output->setText("No hay datos a mostrar");
+        }
+
+        else{
+            output+=trUtf8("Promedio del curso en la región seleccionada: ") + QString::number(prom/counter);
+            ui->text_output->setText(output);
+        }
+
+    }
+
+    else{
+        query.prepare("SELECT Notas.sigla, Notas.notaordinaria FROM Notas,Ingresados WHERE Notas.carne = Ingresados.carne AND Notas.sigla = :sigla and Ingresados.provincia= :provincia AND Ingresados.canton= :canton AND Ingresados.distrito= :distrito AND Notas.anio >= :ano_inicial AND Notas.anio <= :ano_final");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.bindValue(":distrito",ui->dropdown_distrito->currentText());
+        query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+        while(query.next()){
+
+            if (query.value(1)=="RJ" || query.value(1)=="RM"){
+                ;
+            }
+
+            else if(query.value(1)=="RI"){
+                counter+=1.0;
+                prom+=4.0;
+            }
+
+            else if(query.value(1)=="PE"){
+                counter+=1.0;
+                prom+=5.5;
+            }
+
+            else{
+                counter+=1.0;
+                prom+=query.value(1).toDouble();
+            }
+
+        }
+        if(counter==0.0){
+           ui->text_output->setText("No hay datos a mostrar");
+        }
+
+        else{
+            output+=trUtf8("Promedio de la región seleccionada: ") + QString::number(prom/counter);
+            ui->text_output->setText(output);
+        }
+
+
+    }
+
+    return true;
+}
+
+//Displaying average score of a given student
+
+bool MainWindow::promedio_estudiante(){
+
+    QSqlQuery query;
+    QString output;
+    double counter = 0.0, prom = 0.0;
+
+    query.prepare("SELECT nombre,apellido1,apellido2,notaordinaria,anio FROM Notas WHERE carne = :carne AND anio >= :ano_inicial AND anio <= :ano_final");
+    query.bindValue(":carne",ui->edit_carne->text());
+    query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+    query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+    query.exec();
+
+    while(query.next()){
+
+        if (query.value(3)=="RJ" || query.value(3)=="RM"){
+            ;
+        }
+
+        else if(query.value(3)=="RI"){
+            counter+=1.0;
+            prom+=4.0;
+        }
+
+        else if(query.value(3)=="PE"){
+            counter+=1.0;
+            prom+=5.5;
+        }
+
+        else{
+            counter+=1.0;
+            prom+=query.value(3).toDouble();
+        }
+
+    }
+    if(counter==0.0){
+       ui->text_output->setText("No hay datos a mostrar");
+    }
+
+    else{
+        output+="Promedio del estudiante en el periodo especificado: " + QString::number(prom/counter);
+        ui->text_output->setText(output);
+    }
+
+    int initial = ui->dropdown_ano_inicial->currentText().toInt();
+    int final = ui->dropdown_ano_final->currentText().toInt();
+    QVector<double> x(final-initial), y(final-initial);
+
+    for (int i=0; i<final-initial; i++){
+        counter = 0.0;
+        prom = 0.0;
+        x[i] = initial+i;
+        query.prepare("SELECT notaordinaria FROM Notas WHERE carne = :carne AND anio = :ano");
+        query.bindValue(":carne",ui->edit_carne->text());
+        query.bindValue(":ano",initial+i);
+        query.exec();
+
+        while(query.next()){
+
+            if (query.value(0)=="RJ" || query.value(0)=="RM"){
+                ;
+            }
+
+            else if(query.value(0)=="RI"){
+                counter+=1.0;
+                prom+=4.0;
+            }
+
+            else if(query.value(0)=="PE"){
+                counter+=1.0;
+                prom+=5.5;
+            }
+
+            else{
+                counter+=1.0;
+                prom+=query.value(0).toDouble();
+            }
+        }
+        if(counter == 0.0) y[i] = y[i-1];
+        else y[i] = prom/counter;
+    }
+    ui->widget->addGraph();
+    ui->widget->graph(0)->setData(x, y);
+    ui->widget->xAxis->setRange(initial, final);
+    ui->widget->yAxis->setRange(0, 10);
+    ui->widget->replot();
+
+    return true;
+}
+
+//Displaying admitted students according to region
+
+bool MainWindow::ingresados_region(){
+
+    QSqlQuery query;
+    QString output;
+    int ingresados = 0;
+
+    if(ui->dropdown_provincia->currentText() == "TODAS"){
+
+        query.prepare("SELECT nombre,apellido1,apellido2 FROM Ingresados WHERE anio >= :ano_inicial AND anio <= :ano_final");
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+        output += trUtf8("Ingresados en la región: \n");
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            ingresados += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(ingresados));
+        output += "\n\n";
+
+        ui->text_output->setText(output);
+
+        int initial = ui->dropdown_ano_inicial->currentText().toInt();
+        int final = ui->dropdown_ano_final->currentText().toInt();
+        int max = 0, counter = 0;
+        QVector<double> x(final-initial), y(final-initial);
+
+        for (int i=0; i<final-initial; i++){
+            counter = 0.0;
+            x[i] = initial+i;
+            query.prepare("SELECT carne FROM Ingresados WHERE anio = :ano");
+            query.bindValue(":ano",initial+i);
+            query.exec();
+
+            while(query.next()){
+                counter += 1.0;
+            }
+
+            if(counter > max) max = counter;
+
+            y[i] = counter;
+        }
+        ui->widget->addGraph();
+        ui->widget->graph(0)->setData(x, y);
+        ui->widget->xAxis->setRange(initial, final);
+        ui->widget->yAxis->setRange(0, max);
+        ui->widget->replot();
+    }
+
+    else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() == "TODOS"){
+        query.prepare("SELECT nombre,apellido1,apellido2 FROM Ingresados WHERE provincia = :provincia AND anio >= :ano_inicial AND anio <= :ano_final");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+        output += trUtf8("Ingresados en la región: \n");
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            ingresados += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(ingresados));
+        output += "\n\n";
+
+        ui->text_output->setText(output);
+
+        int initial = ui->dropdown_ano_inicial->currentText().toInt();
+        int final = ui->dropdown_ano_final->currentText().toInt();
+        int max = 0, counter = 0;
+        QVector<double> x(final-initial), y(final-initial);
+
+        for (int i=0; i<final-initial; i++){
+            counter = 0.0;
+            x[i] = initial+i;
+            query.prepare("SELECT carne FROM Ingresados WHERE provincia = :provincia AND anio = :ano");
+            query.bindValue(":ano",initial+i);
+            query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+            query.exec();
+
+            while(query.next()){
+                counter += 1.0;
+            }
+
+            if(counter > max) max = counter;
+
+            y[i] = counter;
+        }
+        ui->widget->addGraph();
+        ui->widget->graph(0)->setData(x, y);
+        ui->widget->xAxis->setRange(initial, final);
+        ui->widget->yAxis->setRange(0, max);
+        ui->widget->replot();
+    }
+
+    else if(ui->dropdown_provincia->currentText() != "TODAS" && ui->dropdown_canton->currentText() != "TODOS" && ui->dropdown_distrito->currentText() == "TODOS"){
+        query.prepare("SELECT nombre,apellido1,apellido2 FROM Ingresados WHERE provincia = :provincia AND canton = :canton AND anio >= :ano_inicial AND anio <= :ano_final");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+        output += trUtf8("Ingresados en la región: \n");
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            ingresados += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(ingresados));
+        output += "\n\n";
+
+        ui->text_output->setText(output);
+
+        int initial = ui->dropdown_ano_inicial->currentText().toInt();
+        int final = ui->dropdown_ano_final->currentText().toInt();
+        int max = 0, counter = 0;
+        QVector<double> x(final-initial), y(final-initial);
+
+        for (int i=0; i<final-initial; i++){
+            counter = 0.0;
+            x[i] = initial+i;
+            query.prepare("SELECT carne FROM Ingresados WHERE provincia = :provincia AND canton = :canton AND anio = :ano");
+            query.bindValue(":ano",initial+i);
+            query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+            query.bindValue(":canton",ui->dropdown_canton->currentText());
+            query.exec();
+
+            while(query.next()){
+                counter += 1.0;
+            }
+
+            if(counter > max) max = counter;
+
+            y[i] = counter;
+        }
+        ui->widget->addGraph();
+        ui->widget->graph(0)->setData(x, y);
+        ui->widget->xAxis->setRange(initial, final);
+        ui->widget->yAxis->setRange(0, max);
+        ui->widget->replot();
+    }
+
+    else{
+        query.prepare("SELECT nombre,apellido1,apellido2 FROM Ingresados WHERE provincia = :provincia AND canton = :canton AND distrito = :distrito AND anio >= :ano_inicial AND anio <= :ano_final");
+        query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+        query.bindValue(":canton",ui->dropdown_canton->currentText());
+        query.bindValue(":distrito",ui->dropdown_distrito->currentText());
+        query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
+        query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
+
+        if(!query.exec()){
+            QMessageBox::critical(0,"Database error!",trUtf8("Debe iniciar sesión"));
+            return false;
+        }
+
+        output += trUtf8("Ingresados en la región: \n");
+
+        while(query.next()){
+            output += query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString() + "\n";
+            ingresados += 1;
+        }
+
+        output += "\n Total: ";
+        output.append(QString("%1").arg(ingresados));
+        output += "\n\n";
+
+        ui->text_output->setText(output);
+
+        int initial = ui->dropdown_ano_inicial->currentText().toInt();
+        int final = ui->dropdown_ano_final->currentText().toInt();
+        int max = 0, counter = 0;
+        QVector<double> x(final-initial), y(final-initial);
+
+        for (int i=0; i<final-initial; i++){
+            counter = 0.0;
+            x[i] = initial+i;
+            query.prepare("SELECT carne FROM Ingresados WHERE provincia = :provincia AND canton = :canton AND distrito = :distrito AND anio = :ano");
+            query.bindValue(":ano",initial+i);
+            query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+            query.bindValue(":canton",ui->dropdown_canton->currentText());
+            query.bindValue(":distrito",ui->dropdown_distrito->currentText());
+            query.exec();
+
+            while(query.next()){
+                counter += 1.0;
+            }
+
+            if(counter > max) max = counter;
+
+            y[i] = counter;
+        }
+        ui->widget->addGraph();
+        ui->widget->graph(0)->setData(x, y);
+        ui->widget->xAxis->setRange(initial, final);
+        ui->widget->yAxis->setRange(0, max);
+        ui->widget->replot();
+
+    }
     return true;
 }
 
@@ -325,94 +829,6 @@ bool MainWindow::fill_list_distrito(){
         while(query.next()){
             ui->dropdown_distrito->addItem(query.value(0).toString());
         }
-    }
-
-    return true;
-}
-
-bool MainWindow::promedio(){
-
-    QSqlQuery query;
-    QString output;
-    double counter = 0.0, prom = 0.0;
-
-    query.prepare("SELECT sigla, notaordinaria FROM Notas WHERE sigla = :sigla");
-    query.bindValue(":sigla",ui->dropdown_sigla->currentText());
-    query.exec();
-
-   while(query.next()){
-
-        if (query.value(1)=="RJ" || query.value(1)=="RM"){
-            ;
-        }
-
-        else if(query.value(1)=="RI"){
-            counter+=1.0;
-            prom+=4.0;
-        }
-
-        else if(query.value(1)=="PE"){
-            counter+=1.0;
-            prom+=5.5;
-        }
-
-        else{
-            counter+=1.0;
-            prom+=query.value(1).toDouble();
-        }
-
-    }
-    if(counter==0.0){
-       ui->text_output->setText("No hay datos a mostrar");
-    }
-
-    else{
-        output+="Promedio del Curso " + ui->dropdown_sigla->currentText() + ": " + QString::number(prom/counter);
-        ui->text_output->setText(output);
-    }
-    return true;
-}
-
-bool MainWindow::promedio_estudiante(){
-    QSqlQuery query;
-    QString output;
-    double counter = 0.0, prom = 0.0;
-
-    query.prepare("SELECT nombre, apellido1, apellido2,notaordinaria FROM Notas WHERE carne = :carne AND anio >= :ano_inicial AND anio <= :ano_final");
-    query.bindValue(":carne",ui->edit_carne->text());
-    query.bindValue(":ano_inicial",ui->dropdown_ano_inicial->currentText().toInt());
-    query.bindValue(":ano_final",ui->dropdown_ano_final->currentText().toInt());
-    query.exec();
-
-    while(query.next()){
-
-        if (query.value(3)=="RJ" || query.value(3)=="RM"){
-            ;
-        }
-
-        else if(query.value(3)=="RI"){
-            counter+=1.0;
-            prom+=4.0;
-        }
-
-        else if(query.value(3)=="PE"){
-            counter+=1.0;
-            prom+=5.5;
-        }
-
-        else{
-            counter+=1.0;
-            prom+=query.value(3).toDouble();
-        }
-
-    }
-    if(counter==0.0){
-       ui->text_output->setText("No hay datos a mostrar");
-    }
-
-    else{
-        output+="Promedio del estudiante en el periodo especificado: " + QString::number(prom/counter);
-        ui->text_output->setText(output);
     }
     return true;
 }

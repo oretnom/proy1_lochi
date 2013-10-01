@@ -18,22 +18,30 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>850</width>
-    <height>600</height>
+    <width>1366</width>
+    <height>768</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Laboratorio de programación</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTextEdit" name="text_output">
     <property name="geometry">
      <rect>
       <x>420</x>
-      <y>20</y>
+      <y>230</y>
       <width>411</width>
       <height>291</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTextEdit{
+background:white;
+}</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_ano">
@@ -65,8 +73,8 @@
    <widget class="QPushButton" name="button_graduados">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>350</y>
+      <x>300</x>
+      <y>10</y>
       <width>131</width>
       <height>27</height>
      </rect>
@@ -78,8 +86,8 @@
    <widget class="QPushButton" name="button_notas">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>390</y>
+      <x>300</x>
+      <y>50</y>
       <width>131</width>
       <height>27</height>
      </rect>
@@ -246,60 +254,11 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>204</width>
-      <height>95</height>
-     </rect>
-    </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_username">
-       <property name="text">
-        <string>username</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="edit_username"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_password">
-       <property name="text">
-        <string>password</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="edit_password">
-       <property name="echoMode">
-        <enum>QLineEdit::Password</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="button_connect">
-       <property name="text">
-        <string>Log in</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-       <property name="default">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>430</y>
+      <x>300</x>
+      <y>90</y>
       <width>131</width>
       <height>27</height>
      </rect>
@@ -311,8 +270,8 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>470</y>
+      <x>300</x>
+      <y>130</y>
       <width>131</width>
       <height>27</height>
      </rect>
@@ -330,6 +289,11 @@
       <height>27</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit{
+background:white;
+}</string>
+    </property>
    </widget>
    <widget class="QLabel" name="label_carne">
     <property name="geometry">
@@ -342,6 +306,111 @@
     </property>
     <property name="text">
      <string>Carné</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>170</y>
+      <width>131</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ingresados/región</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_username">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>7</y>
+      <width>66</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>username</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_connect">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>80</y>
+      <width>131</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 255), stop:0.33 rgba(0, 0, 0, 255), stop:0.34 rgba(255, 30, 30, 255), stop:0.66 rgba(255, 0, 0, 255), stop:0.67 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 0, 255));
+}</string>
+    </property>
+    <property name="text">
+     <string>Log in</string>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="edit_password">
+    <property name="geometry">
+     <rect>
+      <x>92</x>
+      <y>40</y>
+      <width>130</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit{
+background:white;
+}</string>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="edit_username">
+    <property name="geometry">
+     <rect>
+      <x>92</x>
+      <y>7</y>
+      <width>130</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit{
+background:white;
+}</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_password">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>64</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>password</string>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>371</width>
+      <height>211</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -366,24 +435,16 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>button_connect</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>connect()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>212</x>
-     <y>141</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>324</x>
-     <y>67</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>button_graduados</sender>
    <signal>clicked()</signal>
@@ -391,8 +452,8 @@
    <slot>graduados_region()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>440</x>
-     <y>388</y>
+     <x>420</x>
+     <y>348</y>
     </hint>
     <hint type="destinationlabel">
      <x>159</x>
@@ -407,8 +468,8 @@
    <slot>nota_curso_limitada()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>440</x>
-     <y>428</y>
+     <x>420</x>
+     <y>388</y>
     </hint>
     <hint type="destinationlabel">
      <x>180</x>
@@ -484,11 +545,11 @@
    <sender>pushButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>promedio()</slot>
+   <slot>promedio_curso_region()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>550</x>
-     <y>481</y>
+     <x>530</x>
+     <y>441</y>
     </hint>
     <hint type="destinationlabel">
      <x>586</x>
@@ -503,12 +564,44 @@
    <slot>promedio_estudiante()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>465</x>
-     <y>525</y>
+     <x>445</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>421</x>
      <y>526</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ingresados_region()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>507</x>
+     <y>526</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>558</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_connect</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>connect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>67</y>
     </hint>
    </hints>
   </connection>
@@ -520,7 +613,9 @@
   <slot>nota_curso_limitada()</slot>
   <slot>fill_list_canton()</slot>
   <slot>fill_list_distrito()</slot>
-  <slot>promedio()</slot>
+  <slot>promedio_curso_region()</slot>
   <slot>promedio_estudiante()</slot>
+  <slot>ingresados_region()</slot>
+  <slot>disconnect()</slot>
  </slots>
 </ui>
