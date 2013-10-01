@@ -298,6 +298,49 @@ bool MainWindow::promedio_curso_region(){
             else{
                 output+= trUtf8("Promedio del curso en la región seleccionada: ") + QString::number(prom/counter);
                 ui->text_output->setText(output);
+
+                int initial = ui->dropdown_ano_inicial->currentText().toInt();
+                int final = ui->dropdown_ano_final->currentText().toInt();
+                QVector<double> x(final-initial), y(final-initial);
+
+                for (int i=0; i<final-initial; i++){
+                    counter = 0.0;
+                    prom = 0.0;
+                    x[i] = initial+i;
+                    query.prepare("SELECT Notas.notaordinaria FROM Notas,Ingresados WHERE Notas.carne = Ingresados.carne AND Notas.sigla = :sigla AND Notas.anio = :ano");
+                    query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+                    query.bindValue(":ano",initial+i);
+                    query.exec();
+
+                    while(query.next()){
+
+                        if (query.value(0)=="RJ" || query.value(0)=="RM"){
+                            ;
+                        }
+
+                        else if(query.value(0)=="RI"){
+                            counter+=1.0;
+                            prom+=4.0;
+                        }
+
+                        else if(query.value(0)=="PE"){
+                            counter+=1.0;
+                            prom+=5.5;
+                        }
+
+                        else{
+                            counter+=1.0;
+                            prom+=query.value(0).toDouble();
+                        }
+                    }
+                    if(counter == 0.0) y[i] = 6;
+                    else y[i] = prom/counter;
+                }
+                ui->widget->addGraph();
+                ui->widget->graph(0)->setData(x, y);
+                ui->widget->xAxis->setRange(initial, final);
+                ui->widget->yAxis->setRange(0, 10);
+                ui->widget->replot();
             }
         }
 
@@ -343,6 +386,50 @@ bool MainWindow::promedio_curso_region(){
         else{
             output+=trUtf8("Promedio del curso en la región seleccionada: ") + QString::number(prom/counter);
             ui->text_output->setText(output);
+
+            int initial = ui->dropdown_ano_inicial->currentText().toInt();
+            int final = ui->dropdown_ano_final->currentText().toInt();
+            QVector<double> x(final-initial), y(final-initial);
+
+            for (int i=0; i<final-initial; i++){
+                counter = 0.0;
+                prom = 0.0;
+                x[i] = initial+i;
+                query.prepare("SELECT Notas.notaordinaria FROM Notas,Ingresados WHERE Ingresados.provincia = :provincia AND Notas.carne = Ingresados.carne AND Notas.sigla = :sigla AND Notas.anio = :ano");
+                query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+                query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+                query.bindValue(":ano",initial+i);
+                query.exec();
+
+                while(query.next()){
+
+                    if (query.value(0)=="RJ" || query.value(0)=="RM"){
+                        ;
+                    }
+
+                    else if(query.value(0)=="RI"){
+                        counter+=1.0;
+                        prom+=4.0;
+                    }
+
+                    else if(query.value(0)=="PE"){
+                        counter+=1.0;
+                        prom+=5.5;
+                    }
+
+                    else{
+                        counter+=1.0;
+                        prom+=query.value(0).toDouble();
+                    }
+                }
+                if(counter == 0.0) y[i] = 6;
+                else y[i] = prom/counter;
+            }
+            ui->widget->addGraph();
+            ui->widget->graph(0)->setData(x, y);
+            ui->widget->xAxis->setRange(initial, final);
+            ui->widget->yAxis->setRange(0, 10);
+            ui->widget->replot();
         }
 
     }
@@ -389,6 +476,51 @@ bool MainWindow::promedio_curso_region(){
         else{
             output+=trUtf8("Promedio del curso en la región seleccionada: ") + QString::number(prom/counter);
             ui->text_output->setText(output);
+
+            int initial = ui->dropdown_ano_inicial->currentText().toInt();
+            int final = ui->dropdown_ano_final->currentText().toInt();
+            QVector<double> x(final-initial), y(final-initial);
+
+            for (int i=0; i<final-initial; i++){
+                counter = 0.0;
+                prom = 0.0;
+                x[i] = initial+i;
+                query.prepare("SELECT Notas.notaordinaria FROM Notas,Ingresados WHERE Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Notas.carne = Ingresados.carne AND Notas.sigla = :sigla AND Notas.anio = :ano");
+                query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+                query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+                query.bindValue(":canton",ui->dropdown_canton->currentText());
+                query.bindValue(":ano",initial+i);
+                query.exec();
+
+                while(query.next()){
+
+                    if (query.value(0)=="RJ" || query.value(0)=="RM"){
+                        ;
+                    }
+
+                    else if(query.value(0)=="RI"){
+                        counter+=1.0;
+                        prom+=4.0;
+                    }
+
+                    else if(query.value(0)=="PE"){
+                        counter+=1.0;
+                        prom+=5.5;
+                    }
+
+                    else{
+                        counter+=1.0;
+                        prom+=query.value(0).toDouble();
+                    }
+                }
+                if(counter == 0.0) y[i] = 6;
+                else y[i] = prom/counter;
+            }
+            ui->widget->addGraph();
+            ui->widget->graph(0)->setData(x, y);
+            ui->widget->xAxis->setRange(initial, final);
+            ui->widget->yAxis->setRange(0, 10);
+            ui->widget->replot();
         }
 
     }
@@ -436,6 +568,52 @@ bool MainWindow::promedio_curso_region(){
         else{
             output+=trUtf8("Promedio de la región seleccionada: ") + QString::number(prom/counter);
             ui->text_output->setText(output);
+
+            int initial = ui->dropdown_ano_inicial->currentText().toInt();
+            int final = ui->dropdown_ano_final->currentText().toInt();
+            QVector<double> x(final-initial), y(final-initial);
+
+            for (int i=0; i<final-initial; i++){
+                counter = 0.0;
+                prom = 0.0;
+                x[i] = initial+i;
+                query.prepare("SELECT Notas.notaordinaria FROM Notas,Ingresados WHERE Ingresados.provincia = :provincia AND Ingresados.canton = :canton AND Ingresados.distrito = :distrito AND Notas.carne = Ingresados.carne AND Notas.sigla = :sigla AND Notas.anio = :ano");
+                query.bindValue(":sigla",ui->dropdown_sigla->currentText());
+                query.bindValue(":provincia",ui->dropdown_provincia->currentText());
+                query.bindValue(":canton",ui->dropdown_canton->currentText());
+                query.bindValue(":distrito",ui->dropdown_distrito->currentText());
+                query.bindValue(":ano",initial+i);
+                query.exec();
+
+                while(query.next()){
+
+                    if (query.value(0)=="RJ" || query.value(0)=="RM"){
+                        ;
+                    }
+
+                    else if(query.value(0)=="RI"){
+                        counter+=1.0;
+                        prom+=4.0;
+                    }
+
+                    else if(query.value(0)=="PE"){
+                        counter+=1.0;
+                        prom+=5.5;
+                    }
+
+                    else{
+                        counter+=1.0;
+                        prom+=query.value(0).toDouble();
+                    }
+                }
+                if(counter == 0.0) y[i] = 6;
+                else y[i] = prom/counter;
+            }
+            ui->widget->addGraph();
+            ui->widget->graph(0)->setData(x, y);
+            ui->widget->xAxis->setRange(initial, final);
+            ui->widget->yAxis->setRange(0, 10);
+            ui->widget->replot();
         }
 
 
@@ -523,7 +701,7 @@ bool MainWindow::promedio_estudiante(){
                 prom+=query.value(0).toDouble();
             }
         }
-        if(counter == 0.0) y[i] = y[i-1];
+        if(counter == 0.0) y[i] = 6;
         else y[i] = prom/counter;
     }
     ui->widget->addGraph();
